@@ -9,17 +9,27 @@
 <body>
 
   <script type="text/x-handlebars">
-    <h2>Welcome to Ember.js</h2>
+    <h2>Ember.js Workshop</h2>
+
+    <ul>
+      <li>{{#link-to 'projects'}}Projekte{{/link-to}}</li>
+      <li>{{#link-to 'tasks'}}Aufgaben{{/link-to}}</li>
+      <li>{{#link-to 'time_entries'}}Zeiteinträge{{/link-to}}</li>
+    </ul>
 
     {{outlet}}
   </script>
 
-  <script type="text/x-handlebars" data-template-name="index">
-    <ul>
-    {{#each item in model}}
-      <li>{{item}}</li>
-    {{/each}}
-    </ul>
+  <script type="text/x-handlebars" data-template-name="projects">
+    Projekte
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="tasks">
+    Aufgaben
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="time_entries">
+    Zeiteinträge
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
@@ -27,6 +37,8 @@
   <script src="js/libs/ember-1.0.0.js"></script>
   <script src="js/libs/ember-data-1.0.0-beta.3.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/routes/index_route.js"></script>
 
 </body>
 </html>
