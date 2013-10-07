@@ -21,7 +21,7 @@
   </script>
 
   <script type="text/x-handlebars" data-template-name="projects">
-    Projekte
+    Projekte {{#link-to 'projects.new'}}Neues Projekt erstellen{{/link-to}}
     <hr>
     {{#each}}
       {{name}}<br>
@@ -36,6 +36,14 @@
       {{/each}}
 
     {{/each}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="projects/new">
+    <form {{ action createProject on="submit" }}>
+      Neues Projekt<br>
+      Name: {{view Ember.TextField valueBinding="name"}}
+      <button>Erstellen</button>
+    </form>
   </script>
 
   <script type="text/x-handlebars" data-template-name="tasks">
@@ -70,6 +78,7 @@
 
   <script src="js/routes/index_route.js"></script>
   <script src="js/routes/projects_route.js"></script>
+  <script src="js/routes/projects_new_route.js"></script>
   <script src="js/routes/tasks_route.js"></script>
   <script src="js/routes/time_entries_route.js"></script>
 
