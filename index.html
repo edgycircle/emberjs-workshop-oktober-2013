@@ -28,7 +28,7 @@
 
   <script type="text/x-handlebars" data-template-name="sidebar">
     {{#if activeTimeEntry}}
-      {{activeTimeEntry.secondsSinceStartedAt}}
+      {{activeTimeEntry.duration}}
       <br><br>
       {{activeTimeEntry.task.name}}<br>
       {{activeTimeEntry.task.project.name}}
@@ -83,7 +83,7 @@
         {{task.name}}<br>
 
         {{#each entry in task.timeEntries}}
-          {{entry.startedAt}}
+          {{entry.duration}}
         {{/each}}
 
       {{/each}}
@@ -107,7 +107,7 @@
 
       {{#each timeEntry in timeEntries}}
         Dodl
-        {{timeEntry.startedAt}}
+        {{timeEntry.duration}}
       {{/each}}
 
     {{/each}}
@@ -117,7 +117,7 @@
     Zeiteinträge
     <hr>
     {{#each}}
-      {{startedAt}} - {{endedAt}}<br>
+      {{startedAt}} - {{endedAt}} - {{duration}}<br>
     {{/each}}
   </script>
 
