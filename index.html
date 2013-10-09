@@ -41,6 +41,12 @@
         {{partial 'autosuggest/input'}}
       {{/if}}
     {{/if}}
+
+    <br><br><br>
+
+    {{#each mostRecentTasks}}
+      {{this.name}}<a {{action workOn this}} href="#"> ></a><br>
+    {{/each}}
   </script>
 
   <script type="text/x-handlebars" data-template-name="autosuggest/selected_task">

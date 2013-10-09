@@ -4,6 +4,16 @@ App.SidebarController = Ember.Controller.extend({
   activeTimeEntry: null,
   inputValue: '',
 
+  mostRecentTasks: function() {
+    var timeEntries = this.get('timeEntries');
+
+    return timeEntries.toArray().sort(function(a, b) {
+      return a.get('endedAt') >= b.get('endedAt') ? -1 : 1;
+    }).map(function(timeEntry) {
+      return timeEntry.get('task');
+    }).uniq().slice(0, 5);
+  }.property('timeEntries.@each'),
+
   suggestedTasks: function() {
     var inputValue = this.get('inputValue');
 
@@ -36,11 +46,29 @@ App.SidebarController = Ember.Controller.extend({
       timeEntry.set('task', task);
       timeEntry.save();
 
-      task.set('timeEntries', []);
       task.get('timeEntries').pushObject(timeEntry);
 
       this.set('activeTimeEntry', timeEntry);
       this.set('selectedTask', null);
+    },
+    workOn: function(task) {
+      if (this.get('activeTimeEntry')) {
+        this.send('stopWorking');
+      }
+
+      var timeEntry = this.store.createRecord('timeEntry');
+
+      timeEntry.set('startedAt', new Date().getTime());
+      timeEntry.set('task', task);
+      timeEntry.save();
+
+      task.get('timeEntries').pushObject(timeEntry);
+
+      this.set('activeTimeEntry', timeEntry);
+      this.set('selectedTask', null);
+      this.set('inputValue', '');
+      this.set('selectedProject', null);
+      this.set('matchingTasks', null);
     },
     createAndWorkOnTask: function() {
       var task = this.store.createRecord('task');
