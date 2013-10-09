@@ -8,6 +8,14 @@ App.SidebarController = Ember.Controller.extend({
     var timeEntries = this.get('timeEntries');
 
     return timeEntries.toArray().sort(function(a, b) {
+      if (a.get('endedAt') == null) {
+        return -1;
+      }
+
+      if (b.get('endedAt') == null) {
+        return 1;
+      }
+
       return a.get('endedAt') >= b.get('endedAt') ? -1 : 1;
     }).map(function(timeEntry) {
       return timeEntry.get('task');
