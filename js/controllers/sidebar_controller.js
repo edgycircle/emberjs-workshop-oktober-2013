@@ -1,34 +1,34 @@
 App.SidebarController = Ember.Controller.extend({
-  matchingTasks: null, //suggestedTasks
+  selectedTask: null,
+  selectedProject: null,
+  activeTimeEntry: null,
+  inputValue: '',
   task: null,
-  searchTerm: '', // nix doppelt nur hier
+
+  suggestedTasks: function() {
+    var inputValue = this.get('inputValue');
+
+    if (inputValue.length == 0) {
+      return [];
+    }
+
+    var regex = new RegExp(inputValue, 'i');
+
+    return this.get('model').filter(function(task) {
+      return task.get('name').match(regex);
+    });
+  }.property('inputValue'),
 
   disableCreateAndWorkOnTaskButton: function() {
-    return this.get('searchTerm').length == 0 || !this.get('selectedProject');
-  }.property('selectedProject', 'searchTerm'),
+    return this.get('inputValue').length == 0 || !this.get('selectedProject');
+  }.property('selectedProject', 'inputValue'),
 
   actions: {
-    inputChanged: function(searchTerm) {
-      console.log("inputChanged", searchTerm);
-      this.set('searchTerm', searchTerm);
-
-      if (searchTerm.length < 1) {
-        return this.set('matchingTasks', null);
-      }
-
-      var regex = new RegExp(searchTerm, 'i');
-
-      var filteredTasks = this.get('model').filter(function(task) {
-        return task.get('name').match(regex);
-      });
-
-      this.set('matchingTasks', filteredTasks)
-    },
     suggestedTaskSelected: function(task) {
       console.log("suggestedTaskSelected");
       this.set('task', task);
       this.set('selectedProject', null);
-      this.set('matchingTasks', null);
+      this.set('inputValue', '');
     },
     workOnTask: function() {
       console.log("workOnTask");
@@ -52,7 +52,7 @@ App.SidebarController = Ember.Controller.extend({
       var timeEntry = this.store.createRecord('timeEntry');
 
       task.set('project', this.get('selectedProject'));
-      task.set('name', this.get('searchTerm'));
+      task.set('name', this.get('inputValue'));
 
       timeEntry.set('startedAt', new Date().getTime());
       timeEntry.set('task', task);
@@ -63,7 +63,7 @@ App.SidebarController = Ember.Controller.extend({
       });
 
       this.set('timeEntry', timeEntry);
-      this.set('searchTerm', '');
+      this.set('inputValue', '');
       this.set('selectedProject', null);
       this.set('matchingTasks', null);
     },
@@ -79,14 +79,4 @@ App.SidebarController = Ember.Controller.extend({
       this.set('timeEntry', null);
     }
   }
-});
-
-App.AutosuggestView = Ember.View.extend({
-  templateName: 'autosuggest',
-  searchTerm: null,
-  searchTextField: Ember.TextField.extend({
-    keyUp: function(event) {
-      this.get('parentView.controller').send('inputChanged', this.get('parentView.searchTerm'));
-    }
-  })
 });

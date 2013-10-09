@@ -55,7 +55,11 @@
   </script>
 
   <script type="text/x-handlebars" data-template-name="autosuggest/input">
-    {{view App.AutosuggestView matchingTasksBinding="matchingTasks"}}
+    {{input valueBinding="inputValue" placeholder="Aufgabe"}}
+    <br><br>
+    {{#each suggestedTasks}}
+      <span {{action suggestedTaskSelected this}}>{{this.name}} (<em>{{this.project.name}}</em>)</span><br>
+    {{/each}}
     <br>
     {{view Ember.Select
                 viewName="select"
@@ -67,14 +71,6 @@
 
     <br><br>
     <button {{action createAndWorkOnTask}} {{bindAttr disabled=disableCreateAndWorkOnTaskButton}}>Aufgabe erstellen und starten</button>
-  </script>
-
-  <script type="text/x-handlebars" data-template-name="autosuggest">
-    {{view view.searchTextField valueBinding="view.searchTerm"}}
-    <br><br>
-    {{#each matchingTasks}}
-      <span {{action suggestedTaskSelected this}}>{{this.name}} (<em>{{this.project.name}}</em>)</span><br>
-    {{/each}}
   </script>
 
   <script type="text/x-handlebars" data-template-name="projects">
