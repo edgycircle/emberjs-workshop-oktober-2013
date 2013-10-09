@@ -27,11 +27,11 @@
   </script>
 
   <script type="text/x-handlebars" data-template-name="sidebar">
-    {{#if timeEntry}}
-      {{timeEntry.secondsSinceStartedAt}}
+    {{#if activeTimeEntry}}
+      {{activeTimeEntry.secondsSinceStartedAt}}
       <br><br>
-      {{timeEntry.task.name}}<br>
-      {{timeEntry.task.project.name}}
+      {{activeTimeEntry.task.name}}<br>
+      {{activeTimeEntry.task.project.name}}
       <br><br>
       <button {{action stopWorking}}>Arbeit beenden</button>
     {{else}}
