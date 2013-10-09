@@ -36,6 +36,7 @@ App.SidebarController = Ember.Controller.extend({
       timeEntry.set('task', task);
       timeEntry.save();
 
+      task.set('timeEntries', []);
       task.get('timeEntries').pushObject(timeEntry);
 
       this.set('activeTimeEntry', timeEntry);

@@ -28,7 +28,7 @@
 
   <script type="text/x-handlebars" data-template-name="sidebar">
     {{#if activeTimeEntry}}
-      {{activeTimeEntry.duration}}
+      {{time activeTimeEntry.duration}}
       <br><br>
       {{activeTimeEntry.task.name}}<br>
       {{activeTimeEntry.task.project.name}}
@@ -141,6 +141,8 @@
   <script src="js/models/time_entry.js"></script>
 
   <script src="js/controllers/sidebar_controller.js"></script>
+
+  <script src="js/helpers/time_helper.js"></script>
 
   <script src="js/fixtures.js"></script>
 </body>
