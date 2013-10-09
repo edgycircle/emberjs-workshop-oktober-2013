@@ -9,15 +9,72 @@
 <body>
 
   <script type="text/x-handlebars">
-    <h2>Ember.js Workshop</h2>
+    <h2>Der Zeitverkäufer</h2>
 
-    <ul>
+    <ul id="navigation">
       <li>{{#link-to 'projects'}}Projekte{{/link-to}}</li>
       <li>{{#link-to 'tasks'}}Aufgaben{{/link-to}}</li>
       <li>{{#link-to 'time_entries'}}Zeiteinträge{{/link-to}}</li>
     </ul>
 
-    {{outlet}}
+    <div id="content">
+      {{outlet}}
+    </div>
+
+    <div id="sidebar">
+      {{render 'sidebar'}}
+    </div>
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="sidebar">
+    {{#if timeEntry}}
+      {{timeEntry.secondsSinceStartedAt}}
+      <br><br>
+      {{timeEntry.task.name}}<br>
+      {{timeEntry.task.project.name}}
+      <br><br>
+      <button {{action stopWorking}}>Arbeit beenden</button>
+    {{else}}
+      {{#if task}}
+        {{partial 'autosuggest/selected_task'}}
+      {{else}}
+        {{partial 'autosuggest/input'}}
+      {{/if}}
+    {{/if}}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="autosuggest/selected_task">
+    {{task.name}}
+    <br>
+    <em>{{task.project.name}}</em>
+    <br>
+    <a href="#" {{action deselectTask}}>Aufgabe ändern</a>
+
+    <br><br>
+    <button {{action workOnTask}}>An Aufgabe arbeiten</button>
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="autosuggest/input">
+    {{view App.AutosuggestView matchingTasksBinding="matchingTasks"}}
+    <br>
+    {{view Ember.Select
+                viewName="select"
+                contentBinding="projects"
+                optionLabelPath="content.name"
+                optionValuePath="content.id"
+                prompt="Projekt wählen"
+                selectionBinding="selectedProject"}}
+
+    <br><br>
+    <button {{action createAndWorkOnTask}} {{bindAttr disabled=disableCreateAndWorkOnTaskButton}}>Aufgabe erstellen und starten</button>
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="autosuggest">
+    {{view view.searchTextField valueBinding="view.searchTerm"}}
+    <br><br>
+    {{#each matchingTasks}}
+      <span {{action suggestedTaskSelected this}}>{{this.name}} (<em>{{this.project.name}}</em>)</span><br>
+    {{/each}}
   </script>
 
   <script type="text/x-handlebars" data-template-name="projects">
@@ -76,6 +133,7 @@
   <script src="js/app.js"></script>
   <script src="js/router.js"></script>
 
+  <script src="js/routes/application_route.js"></script>
   <script src="js/routes/index_route.js"></script>
   <script src="js/routes/projects_route.js"></script>
   <script src="js/routes/projects_new_route.js"></script>
@@ -85,6 +143,8 @@
   <script src="js/models/project.js"></script>
   <script src="js/models/task.js"></script>
   <script src="js/models/time_entry.js"></script>
+
+  <script src="js/controllers/sidebar_controller.js"></script>
 
   <script src="js/fixtures.js"></script>
 </body>
