@@ -3,7 +3,6 @@ App.SidebarController = Ember.Controller.extend({
   selectedProject: null,
   activeTimeEntry: null,
   inputValue: '',
-  task: null,
 
   suggestedTasks: function() {
     var inputValue = this.get('inputValue');
@@ -25,16 +24,13 @@ App.SidebarController = Ember.Controller.extend({
 
   actions: {
     suggestedTaskSelected: function(task) {
-      console.log("suggestedTaskSelected");
-      this.set('task', task);
+      this.set('selectedTask', task);
       this.set('selectedProject', null);
       this.set('inputValue', '');
     },
     workOnTask: function() {
-      console.log("workOnTask");
-
       var timeEntry = this.store.createRecord('timeEntry');
-      var task = this.get('task');
+      var task = this.get('selectedTask');
 
       timeEntry.set('startedAt', new Date().getTime());
       timeEntry.set('task', task);
@@ -43,7 +39,7 @@ App.SidebarController = Ember.Controller.extend({
       task.get('timeEntries').pushObject(timeEntry);
 
       this.set('timeEntry', timeEntry);
-      this.set('task', null);
+      this.set('selectedTask', null);
     },
     createAndWorkOnTask: function() {
       console.log("createAndWorkOnTask");
@@ -68,7 +64,7 @@ App.SidebarController = Ember.Controller.extend({
       this.set('matchingTasks', null);
     },
     deselectTask: function() {
-      this.set('task', null);
+      this.set('selectedTask', null);
     },
     stopWorking: function() {
       var timeEntry = this.get('timeEntry');

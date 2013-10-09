@@ -35,7 +35,7 @@
       <br><br>
       <button {{action stopWorking}}>Arbeit beenden</button>
     {{else}}
-      {{#if task}}
+      {{#if selectedTask}}
         {{partial 'autosuggest/selected_task'}}
       {{else}}
         {{partial 'autosuggest/input'}}
@@ -44,9 +44,9 @@
   </script>
 
   <script type="text/x-handlebars" data-template-name="autosuggest/selected_task">
-    {{task.name}}
+    {{selectedTask.name}}
     <br>
-    <em>{{task.project.name}}</em>
+    <em>{{selectedTask.project.name}}</em>
     <br>
     <a href="#" {{action deselectTask}}>Aufgabe ändern</a>
 
