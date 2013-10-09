@@ -14,7 +14,7 @@ App.SidebarController = Ember.Controller.extend({
 
     var regex = new RegExp(inputValue, 'i');
 
-    return this.get('model').filter(function(task) {
+    return this.get('tasks').filter(function(task) {
       return task.get('name').match(regex);
     });
   }.property('inputValue'),
