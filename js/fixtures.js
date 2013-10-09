@@ -1,3 +1,17 @@
+DS.FixtureAdapter.reopen({
+  queryFixtures: function(records, query) {
+    var results = [];
+
+    for (var i = 0; i < records.length; i++) {
+      if (!records[i].endedAt) {
+        results.push(records[i]);
+      }
+    }
+
+    return results;
+  }
+});
+
 App.Project.FIXTURES = [
  {
    id: 1,
@@ -20,7 +34,7 @@ App.Task.FIXTURES = [
  {
    id: 11,
    name: 'Schreiben',
-   timeEntries: [ 11 ],
+   timeEntries: [ 11, 12 ],
    project: 1
  },
  {
@@ -31,7 +45,7 @@ App.Task.FIXTURES = [
  {
    id: 21,
    name: 'Programmieren',
-   timeEntries: [ 12 ],
+   timeEntries: [ 13 ],
    project: 2
  },
  {
@@ -70,11 +84,19 @@ App.TimeEntry.FIXTURES = [
  {
    id: 11,
    startedAt: new Date(2013, 9, 8, 13, 55).getTime(),
-   endedAt: new Date(2013, 9, 8, 14, 20).getTime()
+   endedAt: new Date(2013, 9, 8, 14, 20).getTime(),
+   task: 11
  },
  {
    id: 12,
    startedAt: new Date(2013, 9, 8, 15, 33).getTime(),
-   endedAt: new Date(2013, 9, 8, 15, 59).getTime()
+   endedAt: new Date(2013, 9, 8, 15, 59).getTime(),
+   task: 11
+ },
+ {
+   id: 13,
+   startedAt: new Date().getTime() - 34000,
+   endedAt: null,
+   task: 21
  }
 ];

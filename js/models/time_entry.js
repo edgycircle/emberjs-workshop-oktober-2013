@@ -5,6 +5,16 @@ App.TimeEntry = DS.Model.extend({
   intervalId: null,
   virtualEndedAt: null,
 
+  init: function() {
+    this._super();
+
+    this.one('didLoad', function() {
+      if (this.get('startedAt') > 0 && !this.get('endedAt') && !this.get('intervalId')) {
+        this.startInterval();
+      }
+    });
+  },
+
   duration: function() {
     var startedAt = this.get('startedAt');
     var endedAt = this.get('endedAt');
@@ -34,12 +44,15 @@ App.TimeEntry = DS.Model.extend({
   },
 
   startInterval: function() {
+    this.stopInterval();
+
     var self = this;
     var intervalId = setInterval(function() {
       self.set('virtualEndedAt', new Date().getTime());
     }, 1000);
 
     this.set('intervalId', intervalId);
+    this.set('virtualEndedAt', new Date().getTime());
   },
 
   stopInterval: function() {
