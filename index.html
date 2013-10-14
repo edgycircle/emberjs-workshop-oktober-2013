@@ -11,12 +11,6 @@
   <script type="text/x-handlebars">
     <h2>Der Zeitverkäufer</h2>
 
-    <ul id="navigation">
-      <li>{{#link-to 'projects'}}Projekte{{/link-to}}</li>
-      <li>{{#link-to 'tasks'}}Aufgaben{{/link-to}}</li>
-      <li>{{#link-to 'time_entries'}}Zeiteinträge{{/link-to}}</li>
-    </ul>
-
     <div id="content">
       {{outlet}}
     </div>
@@ -83,7 +77,7 @@
     Projekte {{#link-to 'projects.new'}}Neues Projekt erstellen{{/link-to}}
     <hr>
     {{#each}}
-      {{name}} (Stunden insgesamt?)<br>
+      {{name}} {{time overallDuration}}<br>
     {{/each}}
   </script>
 
@@ -93,22 +87,6 @@
       Name: {{view Ember.TextField valueBinding="name"}}
       <button>Erstellen</button>
     </form>
-  </script>
-
-  <script type="text/x-handlebars" data-template-name="tasks">
-    Aufgaben
-    <hr>
-    {{#each}}
-      {{name}} (<em>{{project.name}}</em>) (Stunden insgesamt pro Task?)<br>
-    {{/each}}
-  </script>
-
-  <script type="text/x-handlebars" data-template-name="time_entries">
-    Zeiteinträge
-    <hr>
-    {{#each}}
-      Datum (<em>Aufgabe / Projekt</em>)  - Dauer: {{time duration}}<br>
-    {{/each}}
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
@@ -123,8 +101,6 @@
   <script src="js/routes/index_route.js"></script>
   <script src="js/routes/projects_route.js"></script>
   <script src="js/routes/projects_new_route.js"></script>
-  <script src="js/routes/tasks_route.js"></script>
-  <script src="js/routes/time_entries_route.js"></script>
 
   <script src="js/models/project.js"></script>
   <script src="js/models/task.js"></script>
