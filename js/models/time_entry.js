@@ -1,3 +1,10 @@
+// hasEnded()
+// keepDurationAccurate()
+// isIntervalActive() ?
+// startInterval() ?
+// _ private methods
+
+
 App.TimeEntry = DS.Model.extend({
   startedAt: DS.attr('number'),
   endedAt: DS.attr('number'),
@@ -13,6 +20,10 @@ App.TimeEntry = DS.Model.extend({
         this.startInterval();
       }
     });
+  },
+
+  hasEnded: function() {
+    return this.get('startedAt') > 0 && this.get('endedAt') > 0;
   },
 
   duration: function() {
@@ -39,9 +50,9 @@ App.TimeEntry = DS.Model.extend({
 
   endedAtChanged: function() {
     if (this.get('endedAt') > 0) {
-      this.clearInterval();
+      this.stopInterval();
     }
-  },
+  }.observes('endedAt'),
 
   startInterval: function() {
     this.stopInterval();

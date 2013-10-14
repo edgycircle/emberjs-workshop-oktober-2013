@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Ember Starter Kit</title>
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8">
+  <title>Der Zeitverkäufer Testsuite</title>
+
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../qunit/qunit.css">
+
+  <style>
+    #testsuite-frame { padding: 40px 0; }
+    #qunit-tests li { background-color: white; }
+    #app-container {
+      position: relative;
+      min-width: 980px;
+      width: 60%;
+      margin: 0 auto;
+    }
+  </style>
 </head>
 <body>
 
@@ -83,7 +96,17 @@
     Projekte {{#link-to 'projects.new'}}Neues Projekt erstellen{{/link-to}}
     <hr>
     {{#each}}
-      {{name}} (Stunden insgesamt?)<br>
+      {{name}}<br>
+
+      {{#each task in tasks}}
+        {{task.name}}<br>
+
+        {{#each entry in task.timeEntries}}
+          {{entry.duration}}
+        {{/each}}
+
+      {{/each}}
+
     {{/each}}
   </script>
 
@@ -99,7 +122,13 @@
     Aufgaben
     <hr>
     {{#each}}
-      {{name}} (<em>{{project.name}}</em>) (Stunden insgesamt pro Task?)<br>
+      {{name}}<br>
+
+      {{#each timeEntry in timeEntries}}
+        Dodl
+        {{timeEntry.duration}}
+      {{/each}}
+
     {{/each}}
   </script>
 
@@ -107,33 +136,44 @@
     Zeiteinträge
     <hr>
     {{#each}}
-      Datum (<em>Aufgabe / Projekt</em>)  - Dauer: {{time duration}}<br>
+      {{startedAt}} - {{endedAt}} - {{duration}}<br>
     {{/each}}
   </script>
 
-  <script src="js/libs/jquery-1.9.1.js"></script>
-  <script src="js/libs/handlebars-1.0.0.js"></script>
-  <script src="js/libs/ember-1.0.0.js"></script>
-  <script src="js/libs/ember-data-1.0.0-beta.3.js"></script>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
 
-  <script src="js/app.js"></script>
-  <script src="js/router.js"></script>
+  <div id="testsuite-frame">
+    <div id="app-container"></div>
+  </div>
 
-  <script src="js/routes/application_route.js"></script>
-  <script src="js/routes/index_route.js"></script>
-  <script src="js/routes/projects_route.js"></script>
-  <script src="js/routes/projects_new_route.js"></script>
-  <script src="js/routes/tasks_route.js"></script>
-  <script src="js/routes/time_entries_route.js"></script>
+  <script src="../js/libs/jquery-1.9.1.js"></script>
+  <script src="../js/libs/handlebars-1.0.0.js"></script>
+  <script src="../js/libs/ember-1.0.0.js"></script>
+  <script src="../js/libs/ember-data-1.0.0-beta.3.js"></script>
 
-  <script src="js/models/project.js"></script>
-  <script src="js/models/task.js"></script>
-  <script src="js/models/time_entry.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/router.js"></script>
 
-  <script src="js/controllers/sidebar_controller.js"></script>
+  <script src="../js/routes/application_route.js"></script>
+  <script src="../js/routes/index_route.js"></script>
+  <script src="../js/routes/projects_route.js"></script>
+  <script src="../js/routes/projects_new_route.js"></script>
+  <script src="../js/routes/tasks_route.js"></script>
+  <script src="../js/routes/time_entries_route.js"></script>
 
-  <script src="js/helpers/time_helper.js"></script>
+  <script src="../js/models/project.js"></script>
+  <script src="../js/models/task.js"></script>
+  <script src="../js/models/time_entry.js"></script>
 
-  <script src="js/fixtures.js"></script>
+  <script src="../js/controllers/sidebar_controller.js"></script>
+
+  <script src="../js/helpers/time_helper.js"></script>
+
+  <script src="../js/fixtures.js"></script>
+
+  <script src="../qunit/qunit.js"></script>
+
+  <script src="tests.js"></script>
 </body>
 </html>
