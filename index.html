@@ -77,7 +77,7 @@
     Projekte {{#link-to 'projects.new'}}Neues Projekt erstellen{{/link-to}}
     <hr>
     {{#each}}
-      {{name}} {{time overallDuration}}<br>
+      {{#link-to 'project' this }}{{name}}{{/link-to}} {{time overallDuration}}<br>
     {{/each}}
   </script>
 
@@ -87,6 +87,14 @@
       Name: {{view Ember.TextField valueBinding="name"}}
       <button>Erstellen</button>
     </form>
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="project">
+    {{#link-to 'projects'}}< Zurück{{/link-to}}<br><br>
+    {{name}} - {{time overallDuration}}<br><br>
+    {{#each tasks}}
+      {{name}} - {{time overallDuration}}<br>
+    {{/each}}
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
@@ -100,6 +108,7 @@
   <script src="js/routes/application_route.js"></script>
   <script src="js/routes/index_route.js"></script>
   <script src="js/routes/projects_route.js"></script>
+  <script src="js/routes/project_route.js"></script>
   <script src="js/routes/projects_new_route.js"></script>
 
   <script src="js/models/project.js"></script>
