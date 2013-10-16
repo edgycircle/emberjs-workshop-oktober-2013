@@ -1,17 +1,3 @@
-DS.FixtureAdapter.reopen({
-  queryFixtures: function(records, query) {
-    var results = [];
-
-    for (var i = 0; i < records.length; i++) {
-      if (!records[i].endedAt) {
-        results.push(records[i]);
-      }
-    }
-
-    return results;
-  }
-});
-
 App.Project.FIXTURES = [
  {
    id: 1,
@@ -83,20 +69,20 @@ App.Task.FIXTURES = [
 App.TimeEntry.FIXTURES = [
  {
    id: 11,
-   startedAt: new Date(2013, 9, 8, 13, 55).getTime(),
-   endedAt: new Date(2013, 9, 8, 14, 20).getTime(),
+   startedAt: new Date(2013, 9, 8, 13, 55),
+   endedAt: new Date(2013, 9, 8, 14, 20),
    task: 11
  },
  {
    id: 12,
-   startedAt: new Date(2013, 9, 8, 15, 33).getTime(),
-   endedAt: new Date(2013, 9, 8, 15, 59).getTime(),
+   startedAt: new Date(2013, 9, 8, 15, 33),
+   endedAt: new Date(2013, 9, 8, 15, 59),
    task: 11
  },
  {
    id: 13,
-   startedAt: new Date().getTime() - 34000,
-   endedAt: null,
+   startedAt: new Date(2013, 9, 8, 17, 23),
+   endedAt: new Date(2013, 9, 8, 18, 12),
    task: 21
  }
 ];

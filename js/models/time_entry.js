@@ -6,8 +6,8 @@
 
 
 App.TimeEntry = DS.Model.extend({
-  startedAt: DS.attr('number'),
-  endedAt: DS.attr('number'),
+  startedAt: DS.attr('date'),
+  endedAt: DS.attr('date'),
   task: DS.belongsTo('task'),
   intervalId: null,
   virtualEndedAt: null,
@@ -16,40 +16,40 @@ App.TimeEntry = DS.Model.extend({
     this._super();
 
     this.one('didLoad', function() {
-      if (this.get('startedAt') > 0 && !this.get('endedAt') && !this.get('intervalId')) {
+      if (this.get('startedAt') && !this.get('endedAt') && !this.get('intervalId')) {
         this.startInterval();
       }
     });
   },
 
-  hasEnded: function() {
-    return this.get('startedAt') > 0 && this.get('endedAt') > 0;
-  },
+  // hasEnded: function() {
+  //   return this.get('startedAt').getTime() > 0 && this.get('endedAt').getTime() > 0;
+  // },
 
   duration: function() {
     var startedAt = this.get('startedAt');
     var endedAt = this.get('endedAt');
     var virtualEndedAt = this.get('virtualEndedAt');
 
-    if (startedAt > 0 && endedAt > 0) {
-      return endedAt - startedAt;
+    if (startedAt && endedAt) {
+      return endedAt.getTime() - startedAt.getTime();
     }
 
-    if (startedAt > 0 && virtualEndedAt > 0) {
-      return virtualEndedAt - startedAt;
+    if (startedAt && virtualEndedAt) {
+      return virtualEndedAt.getTime() - startedAt.getTime();
     }
 
     return 0;
   }.property('startedAt', 'endedAt', 'virtualEndedAt'),
 
   startedAtChanged: function() {
-    if (this.get('startedAt') > 0 && !this.get('endedAt') && !this.get('intervalId')) {
+    if (this.get('startedAt') && !this.get('endedAt') && !this.get('intervalId')) {
       this.startInterval();
     }
   }.observes('startedAt'),
 
   endedAtChanged: function() {
-    if (this.get('endedAt') > 0) {
+    if (this.get('endedAt')) {
       this.stopInterval();
     }
   }.observes('endedAt'),
@@ -59,11 +59,11 @@ App.TimeEntry = DS.Model.extend({
 
     var self = this;
     var intervalId = setInterval(function() {
-      self.set('virtualEndedAt', new Date().getTime());
+      self.set('virtualEndedAt', new Date());
     }, 1000);
 
     this.set('intervalId', intervalId);
-    this.set('virtualEndedAt', new Date().getTime());
+    this.set('virtualEndedAt', new Date());
   },
 
   stopInterval: function() {
@@ -73,5 +73,28 @@ App.TimeEntry = DS.Model.extend({
   willDestroy: function() {
     this.stopInterval();
     this._super();
+  }
+});
+
+App.TimeEntry.reopenClass({
+  findActive: function() {
+    var url = this.store.adapterFor('timeEntry').buildURL('timeEntry') + '/active';
+    var self = this;
+
+    return Ember.$.ajax({
+      url: url,
+      type: 'GET'
+    }).then(function(response) {
+      if (response && response.time_entry) {
+        return self.store.push('timeEntry', {
+          id: response.time_entry.id,
+          startedAt: new Date(response.time_entry.started_at),
+          endedAt: null,
+          task: response.time_entry.task_id
+        });
+      } else {
+        return null;
+      }
+    });
   }
 });

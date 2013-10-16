@@ -50,7 +50,7 @@ App.SidebarController = Ember.Controller.extend({
       var timeEntry = this.store.createRecord('timeEntry');
       var task = this.get('selectedTask');
 
-      timeEntry.set('startedAt', new Date().getTime());
+      timeEntry.set('startedAt', new Date());
       timeEntry.set('task', task);
       timeEntry.save();
 
@@ -66,11 +66,9 @@ App.SidebarController = Ember.Controller.extend({
 
       var timeEntry = this.store.createRecord('timeEntry');
 
-      timeEntry.set('startedAt', new Date().getTime());
+      timeEntry.set('startedAt', new Date());
       timeEntry.set('task', task);
       timeEntry.save();
-
-      task.get('timeEntries').pushObject(timeEntry);
 
       this.set('activeTimeEntry', timeEntry);
       this.set('selectedTask', null);
@@ -85,12 +83,11 @@ App.SidebarController = Ember.Controller.extend({
       task.set('project', this.get('selectedProject'));
       task.set('name', this.get('inputValue'));
 
-      timeEntry.set('startedAt', new Date().getTime());
-      timeEntry.set('task', task);
+      timeEntry.set('startedAt', new Date());
 
-      timeEntry.save().then(function(savedTimeEntry) {
-        savedTimeEntry.get('task').get('timeEntries').pushObject(savedTimeEntry);
-        savedTimeEntry.get('task').get('project').get('tasks').pushObject(savedTimeEntry.get('task'));
+      task.save().then(function(savedTask) {
+        timeEntry.set('task', task);
+        timeEntry.save();
       });
 
       this.set('activeTimeEntry', timeEntry);
@@ -104,7 +101,7 @@ App.SidebarController = Ember.Controller.extend({
     stopWorking: function() {
       var timeEntry = this.get('activeTimeEntry');
 
-      timeEntry.set('endedAt', new Date().getTime());
+      timeEntry.set('endedAt', new Date());
       timeEntry.save();
 
       this.set('activeTimeEntry', null);

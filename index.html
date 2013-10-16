@@ -94,6 +94,9 @@
     {{name}} - {{time overallDuration}}<br><br>
     {{#each tasks}}
       {{name}} - {{time overallDuration}}<br>
+      {{#each timeEntries}}
+        {{time duration}}<br>
+      {{/each}}
     {{/each}}
   </script>
 
