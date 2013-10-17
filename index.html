@@ -9,25 +9,31 @@
 <body>
 
   <script type="text/x-handlebars">
-    <h2>Der Zeitverkäufer</h2>
+    <header>
+      <h1>Der Zeitverkäufer</h1>
+    </header>
 
-    <div id="content">
-      {{outlet}}
-    </div>
+    <section>
+      <div id="content">
+        {{outlet}}
+      </div>
 
-    <div id="sidebar">
-      {{render 'sidebar'}}
-    </div>
+      <div id="sidebar">
+        {{render 'sidebar'}}
+      </div>
+    </section>
   </script>
 
   <script type="text/x-handlebars" data-template-name="sidebar">
     {{#if activeTimeEntry}}
-      {{time activeTimeEntry.duration}}
-      <br><br>
-      {{activeTimeEntry.task.name}}<br>
+      <span id="clock">{{time activeTimeEntry.duration}}</span>
+
+      {{activeTimeEntry.task.name}}
+      <label class="underline">Aufgabe</label>
       {{activeTimeEntry.task.project.name}}
-      <br><br>
-      <button {{action stopWorking}}>Arbeit beenden</button>
+      <label class="underline">Projekt</label>
+
+      <button {{action stopWorking}} class="button full-width top-margin">Arbeit beenden</button>
     {{else}}
       {{#if selectedTask}}
         {{partial 'autosuggest/selected_task'}}
@@ -36,74 +42,101 @@
       {{/if}}
     {{/if}}
 
-    <br><br><br>
 
-    {{#each mostRecentTasks}}
-      {{this.name}}<a {{action workOn this}} href="#"> ></a><br>
-    {{/each}}
+    <ul id="recent-tasks">
+      <li class="heading">Zuletzt bearbeitete Aufgaben</li>
+      {{#each mostRecentTasks}}
+        <li>
+          {{name}}<br><em>{{project.name}}</em>
+
+          <span class="quick-start" {{action workOn this}}>></span>
+        </li>
+      {{/each}}
+    <ul>
   </script>
 
   <script type="text/x-handlebars" data-template-name="autosuggest/selected_task">
     {{selectedTask.name}}
-    <br>
-    <em>{{selectedTask.project.name}}</em>
-    <br>
-    <a href="#" {{action deselectTask}}>Aufgabe ändern</a>
+    <label class="underline">Aufgabe</label>
+    {{selectedTask.project.name}}
+    <label class="underline">Projekt</label>
 
-    <br><br>
-    <button {{action workOnTask}}>An Aufgabe arbeiten</button>
+    <a class="right" id="change-task" {{action deselectTask}}>Aufgabe ändern</a>
+
+    <button {{action workOnTask}} class="button full-width">An Aufgabe arbeiten</button>
   </script>
 
   <script type="text/x-handlebars" data-template-name="autosuggest/input">
-    {{input valueBinding="inputValue" placeholder="Aufgabe"}}
-    <br><br>
-    {{#each suggestedTasks}}
-      <span {{action suggestedTaskSelected this}}>{{this.name}} (<em>{{this.project.name}}</em>)</span><br>
-    {{/each}}
-    <br>
-    {{view Ember.Select
-                viewName="select"
-                contentBinding="projects"
-                optionLabelPath="content.name"
-                optionValuePath="content.id"
-                prompt="Projekt wählen"
-                selectionBinding="selectedProject"}}
+    {{input valueBinding="inputValue" placeholder="Bitte Aufgabe angeben" class="block"}}
 
-    <br><br>
-    <button {{action createAndWorkOnTask}} {{bindAttr disabled=disableCreateAndWorkOnTaskButton}}>Aufgabe erstellen und starten</button>
+    <ul id="autosuggestions">
+      {{#each suggestedTasks}}
+        <li {{action suggestedTaskSelected this}}>{{this.name}}<br><em>{{this.project.name}}</em></li>
+      {{/each}}
+    </ul>
+
+    <div class="dropdown">
+      <div class="dropdown-toggle">
+        <label class="placeholder">Bitte Projekt auswählen</label>
+        <span class="placeholder-icon">+</span>
+      </div>
+      <ul class="dropdown-menu">
+        {{#each projects}}
+          <li {{bind-attr data-value="id"}}>{{name}}</li>
+        {{/each}}
+      </ul>
+
+      {{view Ember.Select
+                  viewName="select"
+                  contentBinding="projects"
+                  optionLabelPath="content.name"
+                  optionValuePath="content.id"
+                  prompt="Projekt wählen"
+                  selectionBinding="selectedProject"}}
+    </div>
+
+    <button {{action createAndWorkOnTask}} {{bindAttr disabled=disableCreateAndWorkOnTaskButton}} class="button full-width">
+      Aufgabe erstellen + Start
+    </button>
   </script>
 
   <script type="text/x-handlebars" data-template-name="projects">
-    Projekte {{#link-to 'projects.new'}}Neues Projekt erstellen{{/link-to}}
-    <hr>
-    {{#each}}
-      {{#link-to 'project' this }}{{name}}{{/link-to}} {{time overallDuration}}<br>
-    {{/each}}
+    <h2>Projektübersicht</h2>
+    {{#link-to 'projects.new' class="button right"}}Neues Projekt erstellen{{/link-to}}
+
+    <ul class="item-list">
+      {{#each}}
+        <li>{{#link-to 'project' this }}{{name}}{{/link-to}}<span class="time right">{{time overallDuration}}</span></li>
+      {{/each}}
+    </ul>
   </script>
 
   <script type="text/x-handlebars" data-template-name="projects/new">
+    <h2>Neues Projekt erstellen</h2>
+
     <form {{ action createProject on="submit" }}>
-      Neues Projekt<br>
-      Name: {{view Ember.TextField valueBinding="name"}}
-      <button>Erstellen</button>
+      {{view Ember.TextField valueBinding="name" placeholder="Bitte Projekt Name eingeben" }}
+      <br><br>
+      <button class="button">Projekt erstellen</button>
     </form>
   </script>
 
   <script type="text/x-handlebars" data-template-name="project">
-    {{#link-to 'projects'}}< Zurück{{/link-to}}<br><br>
-    {{name}} - {{time overallDuration}}<br><br>
-    {{#each tasks}}
-      {{name}} - {{time overallDuration}}<br>
-      {{#each timeEntries}}
-        {{time duration}}<br>
+    <h2>{{#link-to 'projects'}}Projektübersicht{{/link-to}} > {{name}}</h2>
+
+    <ul class="item-list">
+      {{#each tasks}}
+        <li>{{name}}<span class="time right">{{time overallDuration}}</span></li>
       {{/each}}
-    {{/each}}
+    </ul>
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
   <script src="js/libs/handlebars-1.0.0.js"></script>
   <script src="js/libs/ember-1.0.0.js"></script>
   <script src="js/libs/ember-data-1.0.0-beta.3.js"></script>
+
+  <script src="js/dropdown.js"></script>
 
   <script src="js/app.js"></script>
   <script src="js/router.js"></script>

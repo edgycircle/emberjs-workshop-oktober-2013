@@ -13,9 +13,9 @@ Ember.Handlebars.helper('time', function(value, options) {
     seconds = "0" + seconds;
   }
 
-  if (hours > 0) {
-    return new Handlebars.SafeString("%@:%@".fmt(hours, minutes));
-  } else {
-    return new Handlebars.SafeString("%@:%@".fmt(minutes, seconds));
+  if (hours < 10) {
+    hours = "0" + hours;
   }
+
+  return new Handlebars.SafeString("%@:%@:%@".fmt(hours, minutes, seconds));
 });
