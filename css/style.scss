@@ -31,6 +31,23 @@ header {
   height: 40px;
   width: 100%;
   padding: 15px 0 20px;
+
+  h1 {
+    margin: 0;
+    font-weight: normal;
+    display: inline-block;
+    border: 2px solid $white;
+    color: $white;
+    padding: 12px 24px 11px 24px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+  a {
+    display: inline-block;
+    margin: 15px 0;
+    float: right;
+  }
 }
 
 #content {
@@ -44,19 +61,6 @@ header {
   float: right;
 }
 
-h1 {
-  font-weight: normal;
-  line-height: 1;
-  a {
-    display: inline-block;
-    border: 2px solid $white;
-    color: $white;
-    padding: 12px 24px 11px 24px;
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-decoration: none;
-  }
-}
 
 section {
   padding: 65px 0;

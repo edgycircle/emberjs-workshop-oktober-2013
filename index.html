@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Ember Starter Kit</title>
+  <meta charset="utf-8">
+  <title>Der Zeitverkäufer</title>
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -10,7 +10,12 @@
 
   <script type="text/x-handlebars">
     <header>
-      <h1 class="responsive-centered">{{#link-to 'projects'}}Der Zeitverkäufer{{/link-to}}</h1>
+      <div class="responsive-centered">
+        <h1>Der Zeitverkäufer</h1>
+        <a href="http://edgycircle.com" target="_blank">
+          <img src="edgycircle-logo-2x.png" height="15" width="92" alt="" />
+        </a>
+      </div>
     </header>
 
     <section class="responsive-centered">
@@ -102,7 +107,7 @@
 
   <script type="text/x-handlebars" data-template-name="projects">
     <h2>Projektübersicht</h2>
-    {{#link-to 'projects.new' class="button right"}}Neues Projekt erstellen &rsaquo;{{/link-to}}
+    {{#link-to 'projects.new' class="button right"}}Neues Projekt erstellen{{/link-to}}
 
     <ul class="item-list">
       {{#each}}
