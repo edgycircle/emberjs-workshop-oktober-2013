@@ -10,10 +10,10 @@
 
   <script type="text/x-handlebars">
     <header>
-      <h1>Der Zeitverkäufer</h1>
+      <h1 class="responsive-centered">{{#link-to 'projects'}}Der Zeitverkäufer{{/link-to}}</h1>
     </header>
 
-    <section>
+    <section class="responsive-centered">
       <div id="content">
         {{outlet}}
       </div>
@@ -49,7 +49,7 @@
         <li>
           {{name}}<br><em>{{project.name}}</em>
 
-          <span class="quick-start" {{action workOn this}}>></span>
+          <button class="quick-start icon icon-start" {{action workOn this}}></button>
         </li>
       {{/each}}
     <ul>
@@ -63,11 +63,11 @@
 
     <a class="right" id="change-task" {{action deselectTask}}>Aufgabe ändern</a>
 
-    <button {{action workOnTask}} class="button full-width">An Aufgabe arbeiten</button>
+    <button {{action workOnTask}} class="button full-width">Arbeit beginnen</button>
   </script>
 
   <script type="text/x-handlebars" data-template-name="autosuggest/input">
-    {{input valueBinding="inputValue" placeholder="Bitte Aufgabe angeben" class="block"}}
+    {{input valueBinding="inputValue" placeholder="Aufgabe eingeben" class="block"}}
 
     <ul id="autosuggestions">
       {{#each suggestedTasks}}
@@ -77,8 +77,8 @@
 
     <div class="dropdown">
       <div class="dropdown-toggle">
-        <label class="placeholder">Bitte Projekt auswählen</label>
-        <span class="placeholder-icon">+</span>
+        <label class="placeholder default-value">Projekt auswählen</label>
+        <span class="caret"></span>
       </div>
       <ul class="dropdown-menu">
         {{#each projects}}
@@ -102,7 +102,7 @@
 
   <script type="text/x-handlebars" data-template-name="projects">
     <h2>Projektübersicht</h2>
-    {{#link-to 'projects.new' class="button right"}}Neues Projekt erstellen{{/link-to}}
+    {{#link-to 'projects.new' class="button right"}}Neues Projekt erstellen &rsaquo;{{/link-to}}
 
     <ul class="item-list">
       {{#each}}
@@ -115,14 +115,14 @@
     <h2>Neues Projekt erstellen</h2>
 
     <form {{ action createProject on="submit" }}>
-      {{view Ember.TextField valueBinding="name" placeholder="Bitte Projekt Name eingeben" }}
+      {{view Ember.TextField valueBinding="name" placeholder="Name des Projekts eingeben" }}
       <br><br>
       <button class="button">Projekt erstellen</button>
     </form>
   </script>
 
   <script type="text/x-handlebars" data-template-name="project">
-    <h2>{{#link-to 'projects'}}Projektübersicht{{/link-to}} > {{name}}</h2>
+    <h2>{{#link-to 'projects'}}Projekte{{/link-to}} &rsaquo; {{name}}</h2>
 
     <ul class="item-list">
       {{#each tasks}}

@@ -13,7 +13,7 @@ $(document).ready(function() {
     var dropdownValue = $(this).data('value');
     var that = this;
 
-    $dropdown.find('.dropdown-toggle label').first().text(dropdownLabel);
+    $dropdown.find('.dropdown-toggle label').first().removeClass('default-value').text(dropdownLabel);
 
     $('select').first().val(dropdownValue);
     $('select').trigger('change');

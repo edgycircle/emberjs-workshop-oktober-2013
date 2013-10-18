@@ -1,15 +1,15 @@
-$beige: #fcf7ef;
+$beige: #fafaf9;
 $grey: #515151;
-$green: #5cb988;
+$green: #18b98b;
 $white: #fffefe;
 $light-grey: #e2e0d9;
 
 @mixin box-sizing( $type: border-box ) {
-    -webkit-box-sizing: $type;
-       -moz-box-sizing: $type;
-         -o-box-sizing: $type;
-        -ms-box-sizing: $type;
-            box-sizing: $type;
+  -webkit-box-sizing: $type;
+     -moz-box-sizing: $type;
+       -o-box-sizing: $type;
+      -ms-box-sizing: $type;
+          box-sizing: $type;
 }
 
 html, body {
@@ -19,41 +19,60 @@ html, body {
   color: $grey;
 }
 
+.responsive-centered {
+  width: 92%;
+  max-width: 1200px;
+  min-width: 960px;
+  margin: 0 auto;
+}
+
 header {
   background-color: $grey;
   height: 40px;
   width: 100%;
-  padding: 20px;
+  padding: 15px 0 20px;
 }
 
 #content {
-  width: 71%;
+  width: 66%;
   margin-right: 5%;
   float: left;
 }
 
 #sidebar {
-  width: 24%;
+  width: 29%;
   float: right;
 }
 
 h1 {
-  margin: 0;
-  border: 2px solid $white;
-  display: inline-block;
-  color: $white;
-  padding: 12px 24px 11px 24px;
-  font-size: 12px;
-  letter-spacing: 2px;
   font-weight: normal;
+  line-height: 1;
+  a {
+    display: inline-block;
+    border: 2px solid $white;
+    color: $white;
+    padding: 12px 24px 11px 24px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
 }
 
 section {
-  padding: 63px 70px;
+  padding: 65px 0;
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
 }
 
 h2 {
   display: inline-block;
+  font-weight: 100;
+  font-size: 30px;
+  letter-spacing: 1px;
+  margin: 10px 0 40px;
 
   a {
     color: $grey;
@@ -61,6 +80,7 @@ h2 {
 
     &:hover, &:active {
       color: $green;
+      border-bottom: 2px solid $green;
     }
   }
 }
@@ -68,9 +88,10 @@ h2 {
 .button {
   display: inline-block;
   background-color: $green;
-  padding: 16px 22px;
+  padding: 14px 22px;
   color: $white;
   border: none;
+  font-weight: 100;
 
   &:link, &:visited, &:hover, &:active {
     text-decoration: none;
@@ -89,15 +110,14 @@ h2 {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  background-color: $white;
 
-  border: 1px solid $light-grey;
+  border-top: 1px solid $light-grey;
   border-bottom: none;
 
   li {
     border-bottom: 1px solid $light-grey;
-    padding: 13px 13px 12px 13px;
-    font-weight: bold;
+    padding: 13px 0 12px;
+    font-weight: normal;
 
     a {
       color: $grey;
@@ -110,10 +130,7 @@ h2 {
   }
 }
 
-.time {
-  font-weight: lighter;
-  font-size: 14px;
-}
+.time { font-weight: 100; }
 
 .block {
   display: block;
@@ -131,6 +148,7 @@ input[type=text] {
     outline: none;
   }
 }
+
 
 .underline {
   font-size: 9px;
@@ -150,17 +168,17 @@ input[type=text] {
 
 .dropdown {
   width: 100%;
-  margin: 20px 0;
+  margin: 10px 0 20px;
 
   .dropdown-toggle {
+    @include box-sizing();
     cursor: pointer;
-    border: 1px solid $grey;
-    background-color: $white;
+    border: 1px solid $light-grey;
     padding: 11px;
     color: $grey;
     width: 100%;
     position: relative;
-    @include box-sizing();
+    background-color: $white;
 
     .placeholder {
       cursor: pointer;
@@ -169,35 +187,63 @@ input[type=text] {
       letter-spacing: 0;
       text-transform: none;
       margin: 0;
+      &.default-value { color: rgb(169, 169, 169); }
     }
 
-    .placeholder-icon {
-      float: right;
+    .caret {
+      position: absolute;
+      right: -1px;
+      top: -1px;
       background-color: $grey;
       color: $white;
       display: inline-block;
-      height: 31px;
-      width: 40px;
-      position: absolute;
-      right: 0;
-      top: 0;
+      height: 42px;
+      width: 42px;
       text-align: center;
-      padding-top: 10px;
+      &:before, &:after {
+        position: absolute;
+        top: 20px;
+      }
+      &:before {
+        left: 13px;
+        content: '';
+        border-width: 6px 8px;
+        border-color: $white transparent transparent;
+        border-style: solid;
+      }
+
+      &:after {
+        left: 15px;
+        content: '';
+        border-width: 4px 6px;
+        border-color: $grey transparent transparent;
+        border-style: solid;
+      }
     }
   }
   .dropdown-menu {
+    @include box-sizing();
+    position: relative;
+    z-index: 10;
     display: none;
-    list-style-type: none;
+    list-style: none;
     margin: 0;
     padding: 0;
     width: 100%;
     cursor: pointer;
+    border: 1px solid $light-grey;
+    border-top: 0;
+    // border-top: 1px solid $beige;
+    // margin-top: -1px;
 
     li {
-      padding: 5px 11px;
-      background-color: $grey;
-      color: $white;
-      border-bottom: 1px solid $light-grey;
+      padding: 7px 11px;
+      // background-color: $white;
+      color: $grey;
+      border-top: 1px solid $light-grey;
+      font-weight: 100;
+      font-size: 14px;
+      &:nth-of-type(1) { border-top: 0; }
 
       &:hover {
         background-color: $light-grey;
@@ -228,9 +274,10 @@ input[type=text] {
   li {
     font-size: 15px;
     font-weight: lighter;
-    margin: 10px 0;
-    padding: 0 5px;
+    margin: 5px 0;
+    padding: 5px 10px;
     cursor: pointer;
+    &:last-of-type { margin-bottom: 20px; }
 
     em {
       font-style: normal;
@@ -261,20 +308,24 @@ input[type=text] {
 
 #clock {
   display: block;
-  font-size: 60px;
+  font-size: 68px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-weight: 100;
+  line-height: 1em;
+  margin-top: -10px;
 }
 
 #recent-tasks {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  margin-top: 40px;
+  margin-top: 70px;
 
   li {
-    border: 1px solid $light-grey;
-    border-top: none;
+    border-width: 0 1px 1px;
+    border-style: solid;
+    border-color: $light-grey;
     padding: 10px;
     font-size: 15px;
     font-weight: lighter;
@@ -290,8 +341,8 @@ input[type=text] {
 
 .quick-start {
   position: absolute;
-  right: 5px;
-  bottom: 5px;
+  right: 10px;
+  bottom: 10px;
   cursor: pointer;
 
   &:hover {
@@ -307,4 +358,58 @@ input[type=text] {
   padding: 5px;
   letter-spacing: 1px;
   border: none;
+}
+
+button.icon {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.icon {
+  line-height: 1;
+  width: 16px;
+  height: 16px;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    display: block;
+    content: '';
+    border: 2px solid $grey;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  &:hover:before { border-color: $green; }
+
+  &:after {
+    position: absolute;
+    display: block;
+    content: '';
+    width: 0;
+    height: 0;
+  }
+}
+
+.icon-start {
+  &:after {
+    border-width: 4px 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent $grey;
+    top: 4px;
+    left: 6px;
+  }
+  &:hover:after { border-left-color: $green; }
+}
+
+.icon-stop {
+  &:after {
+    border-width: 3px;
+    border-style: solid;
+    border-color: $grey;
+    top: 5px;
+    left: 5px;
+  }
+  &:hover:after { border-color: $green; }
 }
