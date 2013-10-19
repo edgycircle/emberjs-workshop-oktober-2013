@@ -22,31 +22,36 @@
 <body>
 
   <script type="text/x-handlebars">
-    <h2>Der Zeitverkäufer</h2>
+    <header>
+      <div class="responsive-centered">
+        <h1>Der Zeitverkäufer</h1>
+        <a href="http://edgycircle.com" target="_blank">
+          <img src="edgycircle-logo-2x.png" height="15" width="92" alt="" />
+        </a>
+      </div>
+    </header>
 
-    <ul id="navigation">
-      <li>{{#link-to 'projects'}}Projekte{{/link-to}}</li>
-      <li>{{#link-to 'tasks'}}Aufgaben{{/link-to}}</li>
-      <li>{{#link-to 'time_entries'}}Zeiteinträge{{/link-to}}</li>
-    </ul>
+    <section class="responsive-centered">
+      <div id="content">
+        {{outlet}}
+      </div>
 
-    <div id="content">
-      {{outlet}}
-    </div>
-
-    <div id="sidebar">
-      {{render 'sidebar'}}
-    </div>
+      <div id="sidebar">
+        {{render 'sidebar'}}
+      </div>
+    </section>
   </script>
 
   <script type="text/x-handlebars" data-template-name="sidebar">
     {{#if activeTimeEntry}}
-      {{time activeTimeEntry.duration}}
-      <br><br>
-      {{activeTimeEntry.task.name}}<br>
+      <span id="clock">{{time activeTimeEntry.duration}}</span>
+
+      {{activeTimeEntry.task.name}}
+      <label class="underline">Aufgabe</label>
       {{activeTimeEntry.task.project.name}}
-      <br><br>
-      <button {{action stopWorking}}>Arbeit beenden</button>
+      <label class="underline">Projekt</label>
+
+      <button {{action stopWorking}} class="button full-width top-margin">Arbeit beenden</button>
     {{else}}
       {{#if selectedTask}}
         {{partial 'autosuggest/selected_task'}}
@@ -55,89 +60,93 @@
       {{/if}}
     {{/if}}
 
-    <br><br><br>
 
-    {{#each mostRecentTasks}}
-      {{this.name}}<a {{action workOn this}} href="#"> ></a><br>
-    {{/each}}
+    <ul id="recent-tasks">
+      <li class="heading">Zuletzt bearbeitete Aufgaben</li>
+      {{#each mostRecentTasks}}
+        <li>
+          {{name}}<br><em>{{project.name}}</em>
+
+          <button class="quick-start icon icon-start" {{action workOn this}}></button>
+        </li>
+      {{/each}}
+    <ul>
   </script>
 
   <script type="text/x-handlebars" data-template-name="autosuggest/selected_task">
     {{selectedTask.name}}
-    <br>
-    <em>{{selectedTask.project.name}}</em>
-    <br>
-    <a href="#" {{action deselectTask}}>Aufgabe ändern</a>
+    <label class="underline">Aufgabe</label>
+    {{selectedTask.project.name}}
+    <label class="underline">Projekt</label>
 
-    <br><br>
-    <button {{action workOnTask}}>An Aufgabe arbeiten</button>
+    <a class="right" id="change-task" {{action deselectTask}}>Aufgabe ändern</a>
+
+    <button {{action workOnTask}} class="button full-width">Arbeit beginnen</button>
   </script>
 
   <script type="text/x-handlebars" data-template-name="autosuggest/input">
-    {{input valueBinding="inputValue" placeholder="Aufgabe"}}
-    <br><br>
-    {{#each suggestedTasks}}
-      <span {{action suggestedTaskSelected this}}>{{this.name}} (<em>{{this.project.name}}</em>)</span><br>
-    {{/each}}
-    <br>
-    {{view Ember.Select
-                viewName="select"
-                contentBinding="projects"
-                optionLabelPath="content.name"
-                optionValuePath="content.id"
-                prompt="Projekt wählen"
-                selectionBinding="selectedProject"}}
+    {{input valueBinding="inputValue" placeholder="Aufgabe eingeben" class="block"}}
 
-    <br><br>
-    <button {{action createAndWorkOnTask}} {{bindAttr disabled=disableCreateAndWorkOnTaskButton}}>Aufgabe erstellen und starten</button>
+    <ul id="autosuggestions">
+      {{#each suggestedTasks}}
+        <li {{action suggestedTaskSelected this}}>{{this.name}}<br><em>{{this.project.name}}</em></li>
+      {{/each}}
+    </ul>
+
+    <div class="dropdown">
+      <div class="dropdown-toggle">
+        <label class="placeholder default-value">Projekt auswählen</label>
+        <span class="caret"></span>
+      </div>
+      <ul class="dropdown-menu">
+        {{#each projects}}
+          <li {{bind-attr data-value="id"}}>{{name}}</li>
+        {{/each}}
+      </ul>
+
+      {{view Ember.Select
+                  viewName="select"
+                  contentBinding="projects"
+                  optionLabelPath="content.name"
+                  optionValuePath="content.id"
+                  prompt="Projekt wählen"
+                  selectionBinding="selectedProject"}}
+    </div>
+
+    <button {{action createAndWorkOnTask}} {{bindAttr disabled=disableCreateAndWorkOnTaskButton}} class="button full-width">
+      Aufgabe erstellen + Start
+    </button>
   </script>
 
   <script type="text/x-handlebars" data-template-name="projects">
-    Projekte {{#link-to 'projects.new'}}Neues Projekt erstellen{{/link-to}}
-    <hr>
-    {{#each}}
-      {{name}}<br>
+    <h2>Projektübersicht</h2>
+    {{#link-to 'projects.new' class="button right"}}Neues Projekt erstellen{{/link-to}}
 
-      {{#each task in tasks}}
-        {{task.name}}<br>
-
-        {{#each entry in task.timeEntries}}
-          {{entry.duration}}
-        {{/each}}
-
+    <ul class="item-list">
+      {{#each}}
+        <li>{{#link-to 'project' this }}{{name}}{{/link-to}}<span class="time right">{{time overallDuration}}</span></li>
       {{/each}}
-
-    {{/each}}
+    </ul>
   </script>
 
   <script type="text/x-handlebars" data-template-name="projects/new">
+    <h2>Neues Projekt erstellen</h2>
+
     <form {{ action createProject on="submit" }}>
-      Neues Projekt<br>
-      Name: {{view Ember.TextField valueBinding="name"}}
-      <button>Erstellen</button>
+      {{view Ember.TextField valueBinding="name" placeholder="Name des Projekts eingeben" }}
+      <br><br>
+      <button class="button">Projekt erstellen</button>
     </form>
   </script>
 
-  <script type="text/x-handlebars" data-template-name="tasks">
-    Aufgaben
-    <hr>
-    {{#each}}
-      {{name}}<br>
+  <script type="text/x-handlebars" data-template-name="project">
+    <h2>{{#link-to 'projects'}}Projekte{{/link-to}} &rsaquo; {{name}}</h2>
 
-      {{#each timeEntry in timeEntries}}
-        Dodl
-        {{timeEntry.duration}}
+    <ul class="item-list">
+      {{#each tasks}}
+        <li>{{name}}<span class="time right">{{time overallDuration}}</span></li>
       {{/each}}
-
-    {{/each}}
-  </script>
-
-  <script type="text/x-handlebars" data-template-name="time_entries">
-    Zeiteinträge
-    <hr>
-    {{#each}}
-      {{startedAt}} - {{endedAt}} - {{duration}}<br>
-    {{/each}}
+    </ul>
   </script>
 
   <div id="qunit"></div>
@@ -152,15 +161,16 @@
   <script src="../js/libs/ember-1.0.0.js"></script>
   <script src="../js/libs/ember-data-1.0.0-beta.3.js"></script>
 
+  <script src="../js/dropdown.js"></script>
+
   <script src="../js/app.js"></script>
   <script src="../js/router.js"></script>
 
   <script src="../js/routes/application_route.js"></script>
   <script src="../js/routes/index_route.js"></script>
   <script src="../js/routes/projects_route.js"></script>
+  <script src="../js/routes/project_route.js"></script>
   <script src="../js/routes/projects_new_route.js"></script>
-  <script src="../js/routes/tasks_route.js"></script>
-  <script src="../js/routes/time_entries_route.js"></script>
 
   <script src="../js/models/project.js"></script>
   <script src="../js/models/task.js"></script>

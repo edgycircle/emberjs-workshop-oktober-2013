@@ -2,24 +2,6 @@ App.rootElement = '#app-container';
 App.setupForTesting();
 App.injectTestHelpers();
 
-// QUnit.begin(function() {
-//   Ember.run(function() {
-//     App.advanceReadiness();
-//   });
-// });
-
-// QUnit.testStart(function() {
-//   Ember.run(function() {
-//     App.reset();
-//   });
-
-//   Ember.testing = true;
-// });
-
-// QUnit.testDone(function() {
-//   Ember.testing = false;
-// });
-
 function exists(selector) {
   return !!find(selector).length;
 }
@@ -31,17 +13,19 @@ module("Integration Tests", {
 });
 
 test("Create new project", function() {
+  var projectName = "Test Projekt " + Math.random();
+
   visit("/")
   .click("a:contains('Neues Projekt erstellen')")
-  .fillIn("input[type=text]", "Test Projekt")
-  .click("button")
+  .fillIn("form input[type=text]", projectName)
+  .click("button:contains('Projekt erstellen')")
   .then(function() {
-    ok(exists("*:contains('Test Projekt')"));
+    ok(exists("*:contains('" + projectName + "')"));
   });
 });
 
 module("Unit Tests");
 
-test( "hello test", function() {
+test( "Equality test", function() {
   ok( 1 == "1", "Passed!" );
 });
