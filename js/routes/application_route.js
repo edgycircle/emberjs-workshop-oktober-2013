@@ -1,12 +1,13 @@
 App.ApplicationRoute = Ember.Route.extend({
   setupController: function() {
-    this.controllerFor('sidebar').set('tasks', this.store.find('task'));
-    this.controllerFor('sidebar').set('projects', this.store.find('project'));
-    this.controllerFor('sidebar').set('timeEntries', this.store.find('timeEntry'));
+    var controller = this.controllerFor('sidebar');
 
-    var self = this;
+    controller.set('tasks', this.store.find('task'));
+    controller.set('projects', this.store.find('project'));
+    controller.set('timeEntries', this.store.find('timeEntry'));
+
     App.TimeEntry.findActive().then(function(timeEntry) {
-      self.controllerFor('sidebar').set('activeTimeEntry', timeEntry);
+      controller.set('activeTimeEntry', timeEntry);
     });
   }
 });
